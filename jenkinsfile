@@ -11,9 +11,12 @@ pipeline {
     }
     stage('Build Docker Image') {
       steps {
-        sh 'cd test-nodeapp-1-task && sudo docker build . -t public.ecr.aws/s8b3a9g8/node-app:helloworld'
-        sh 'aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s8b3a9g8'
-        sh 'sudo docker push public.ecr.aws/s8b3a9g8/node-app:helloworld'
+        sh 'cd test-nodeapp-1-task && sudo docker build . -t 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
+        sh 'aws ecr get-login-password --region us-east-1'
+        sh 'sudo docker login --username AWS --password $(aws ecr get-login-password --region us-east-1) https://647560355561.dkr.ecr.us-east-1.amazonaws.com'
+        withDockerRegistry(credentialsId: 'ecr:us-east-1:AWSauthToken', url: 'https://647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app'){
+          sh 'sudo docker push 647560355561.dkr.ecr.us-east-1.amazonaws.com/node-app:latest'
+        }
       }  
     }
    
