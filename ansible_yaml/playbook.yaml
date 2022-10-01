@@ -1,6 +1,0 @@
--
-  name: installing docker on jenkins and app host
-  hosts: all
-  become: true
-  roles:
-    - geerlingguy.docker
